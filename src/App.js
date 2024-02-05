@@ -1,25 +1,35 @@
-import logo from './logo.svg';
 import './App.css';
+//import TodoList from './components/TodoList';
+import TodoItem from "./components/TodoItem"
+import { useReducer } from "react";
+import { initialState } from "./data/todoData";
+import { todosReducer } from "./reducers/todoReducer";
 
-function App() {
+export default function App() {
+  
+  const [todos, dispatch] = useReducer(todosReducer, initialState);
+
+  const handleToggleComplete = (id) => {
+    dispatch({ type: 'TOGGLE_COMPLETE', id });
+  };
+
+  const handleDeleteTodo = (id) => {
+    dispatch({ type: 'DELETE_TODO', id });
+  };
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1>To-Do App</h1>
+      <ul>
+        {todos.map(todo => (
+          <TodoItem
+            key={todo.id}
+            todo={todo}
+            handleToggleComplete={handleToggleComplete}
+            handleDeleteTodo={handleDeleteTodo}
+          />
+        ))}
+      </ul>
     </div>
   );
 }
-
-export default App;
